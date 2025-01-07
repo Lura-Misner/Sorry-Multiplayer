@@ -95,7 +95,6 @@ def threaded_client(connect, p_id, game_id):
                         all_ready = True
 
                         # Loop through and see if anyone isn't ready
-                        print(ready[game_id].keys())
                         for player in ready[game_id].keys():
                             if not ready[game_id][player]:
                                 all_ready = False

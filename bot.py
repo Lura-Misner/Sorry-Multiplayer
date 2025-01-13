@@ -45,7 +45,7 @@ class Bot:
         self.positions = new_positions
 
     def handle_turn(self, all_positions, card) -> {str: [int]}:
-        print(self.color, card.get_value())
+        #print(self.color, card.get_value())
         # Update positions
         self.all_positions = all_positions
         self.update_positions(self.all_positions[self.color])
@@ -61,7 +61,6 @@ class Bot:
             # If there is a possible move, select it at random and update positions
             if possible_moves != {}:
                 move, end_pos = random.choice(list(possible_moves.items()))
-                print(move, end_pos)
 
                 # Handle an 11 swap
                 if move == 'swap' and card.get_value() == Value.Eleven:
@@ -223,7 +222,7 @@ class Bot:
             if possible and start_pos != constants.STARTS[self.color] and start_pos != constants.HOMES[self.color]:
                 self.all_positions[self.color], value = self.handle_split()
                 possible_moves['split'] = value
-                print(self.all_positions)
+                #print(self.all_positions)
 
         # Eight
         elif val == Value.Eight:

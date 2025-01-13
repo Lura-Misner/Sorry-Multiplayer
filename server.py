@@ -22,6 +22,9 @@ ready = {}
 vote_new_game = {}
 
 
+# TODO: Game freezes if player leaves on playable card                      (only when theres a bot?)
+# TODO: Past gid 0, the game will not make lobbies with multiple people    (possibly fixed - needs more testing)
+
 def create_new_game(game_id):
     print(f'Creating new game for game {game_id}')
     new_game = Game()
@@ -213,8 +216,6 @@ def threaded_client(connect, p_id, game_id):
     print("Lost connection")
     connect.close()
 
-
-# TODO: Test this part with the new dictionary stuff, make sure it creates new games as appropriate
 g_id = 0
 while True:
     """
@@ -228,17 +229,12 @@ while True:
 
     # If the game is full or already started, then move to a different game
     if g_id in games:
+        # If the order has been sorted, then the game has started.
+        started = games[g_id].sorted
 
-        started = True
-        # Loop through and see how many players, or if the game is started
+        # Count the number of players in game already
         for p_ids in ready[g_id].keys():
             num_in += 1
-            if not ready[g_id][p_ids]:
-                started = False
-
-        # If there's nobody in the game, then it can't be started
-        if num_in == 0:
-            started = False
 
         if started or num_in == 4:
             g_id += 1
@@ -250,5 +246,6 @@ while True:
         ready[g_id] = {}
         vote_new_game[g_id] = {}
 
+    print(g_id)
     ready[g_id][num_in] = False
     start_new_thread(threaded_client, (conn, num_in, g_id))

@@ -3,16 +3,15 @@ from client import Client
 import pygame
 import sys
 
-
 def main():
     # Initialize the window
     pygame.init()
-    WIN = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
+    win = pygame.display.set_mode((constants.WIDTH, constants.HEIGHT))
     pygame.display.set_caption("Sorry!")
     clock = pygame.time.Clock()
 
     # Character selection
-    client = Client(WIN)
+    client = Client(win)
 
     try:
         client.select_color()
@@ -22,7 +21,7 @@ def main():
 
     run = True
     while run:
-        WIN.fill((192, 192, 192))
+        win.fill((192, 192, 192))
 
         # If the game is going, draw the board. Otherwise, draw the end screen
         if not client.get_server_response('check_won'):

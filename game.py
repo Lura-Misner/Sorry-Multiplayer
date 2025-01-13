@@ -98,6 +98,20 @@ class Game:
                 if self.whos_turn == color and len(self.players) > 0:
                     self.whos_turn = self.players[(ind % len(self.players))].get_color()
 
+        # Look for at least one remaining player, that isn't the one being removed
+        remaining_players = False
+        for p in self.players:
+            if p.__class__.__name__ == 'Player':
+                remaining_players = True
+
+        # If no remaining players, end the game
+        if not remaining_players:
+            print("No remaining players, ending game")
+            self.players.clear()
+            self.won = True
+
+
+
     def get_turn(self) -> str:
         """
         :return: String, color for whose turn it is

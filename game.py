@@ -23,6 +23,7 @@ class Game:
         self.won = False
         self.winner = None
 
+
     def order_players(self):
         """
         Puts the list of players in order from the first person going clockwise
@@ -109,6 +110,14 @@ class Game:
             print("No remaining players, ending game")
             self.players.clear()
             self.won = True
+
+        # If the next player is a bot, handle their turn and move on
+        for p in self.players:
+            if p.get_color() == self.whos_turn:
+                if p.__class__.__name__ == 'Bot':
+                    self.handle_bot_movement()
+                    self.next_player()
+
 
 
 
@@ -275,6 +284,21 @@ class Game:
         if len(self.players) < 4:
             new_bot = Bot(self.available_colors.pop())
             self.players.append(new_bot)
+
+    def add_bot_color(self, bot_color):
+        """
+        Adds a bot to the player list with color specified.
+        If color unavailable, add a random bot
+        """
+
+        if len(self.players) < 4:
+            if bot_color in self.available_colors:
+                new_bot = Bot(bot_color)
+                self.players.append(new_bot)
+            else:
+                self.add_bot()
+
+
 
     def remove_bot(self):
         """

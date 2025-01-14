@@ -21,17 +21,19 @@ games = {}
 ready = {}
 vote_new_game = {}
 
-
-# TODO: Game freezes if player leaves on playable card                      (only when theres a bot?)
-# TODO: Past gid 0, the game will not make lobbies with multiple people    (possibly fixed - needs more testing)
-
 def create_new_game(game_id):
     print(f'Creating new game for game {game_id}')
     new_game = Game()
+    old_game = games[game_id]
 
-    for player in games[game_id].players:
-        new_game.add_player(player.get_color())
+    for player in old_game.players:
+        if player.__class__.__name__ == 'Player':
+            new_game.add_player(player.get_color())
+        else:
+            new_game.add_bot_color(player.get_color())
 
+    # Order the players
+    new_game.order_players()
     games[game_id] = new_game
 
     # Undo new game flags
@@ -238,6 +240,7 @@ while True:
 
         if started or num_in == 4:
             g_id += 1
+            num_in = 0
 
     # If the game does not exist, make a new one
     if g_id not in games:
@@ -246,6 +249,6 @@ while True:
         ready[g_id] = {}
         vote_new_game[g_id] = {}
 
-    print(g_id)
+    print(g_id, num_in)
     ready[g_id][num_in] = False
     start_new_thread(threaded_client, (conn, num_in, g_id))
